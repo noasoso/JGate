@@ -31,7 +31,6 @@ public class MessageManager {
                 try {
                     MessagePack mp = pubQueue.poll(5, TimeUnit.SECONDS);
                     if (mp == null){
-                        log.info("pubQueue empty");
                         continue;
                     }
 
@@ -53,19 +52,25 @@ public class MessageManager {
 
             class Subscriber extends BinaryJedisPubSub{
                 public void onMessage(byte[] channel, byte[] message) {
-                    MessagePack mp = new MessagePack();
-                    mp.fromBytes(message);
+                    try {
+                        MessagePack mp = new MessagePack();
+                        mp.parse(message);
 
-                    log.info("onMessage,ch:" + new String(channel,CharsetUtil.UTF_8)
-                    + ",type:" + mp.type + ",ch:" + mp.channel + ",cid:" + mp.cid
-                    + ",msg:" + new String(mp.message,CharsetUtil.UTF_8));
+                        log.info("onMessage,ch:" + new String(channel,CharsetUtil.UTF_8)
+                                + ",type:" + mp.type + ",ch:" + mp.channel + ",cid:" + mp.cid
+                                + ",msg:" + new String(mp.message,CharsetUtil.UTF_8));
+                    }
+                    catch (Exception e){
+                        log.error("Subscriber error:" + e.toString());
+                    }
+
                 }
             }
 
             Jedis jedis1 = new Jedis(Config.REDIS_HOST,Config.REDIS_PORT);
 
             Subscriber subscriber = new Subscriber();
-            jedis1.subscribe(subscriber,Config.CHANNEL_DDZ.getBytes(CharsetUtil.UTF_8));
+            jedis1.subscribe(subscriber,Config.CHANNEL_GATE.getBytes(CharsetUtil.UTF_8));
 
             log.info("subThread end");
         }
@@ -101,7 +106,7 @@ public class MessageManager {
 
     public void publish(MessagePack mp){
         try {
-            jedis.publish(Config.CHANNEL_DDZ.getBytes(CharsetUtil.UTF_8),mp.toBytes());
+            jedis.publish(Config.CHANNEL_DDZ.getBytes(CharsetUtil.UTF_8),mp.serialize());
             log.debug("publish now");
         }
         catch (Exception e){

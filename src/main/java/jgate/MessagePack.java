@@ -4,6 +4,7 @@ import io.netty.util.CharsetUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 
 public class MessagePack{
     //客户端的唯一Id
@@ -18,6 +19,15 @@ public class MessagePack{
     //消息内容
     public byte[] message = null;
 
+    public String getUTF8Message(){
+        if (message == null){
+            return "";
+        }
+        else {
+            return new String(message,CharsetUtil.UTF_8);
+        }
+    }
+
     public MessagePack(){
 
     }
@@ -29,11 +39,10 @@ public class MessagePack{
         this.message = message;
     }
 
-    public byte[] toBytes(){
+    public byte[] serialize(){
         int len = 2 + (2 + this.cid.length()) + (2 + this.channel.length());
         if (this.message != null){
-            len += 4;
-            len += this.message.length;
+            len += (4 + this.message.length);
         }
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(len).order(ByteOrder.BIG_ENDIAN);
@@ -58,7 +67,7 @@ public class MessagePack{
         return byteBuffer.array();
     }
 
-    public boolean fromBytes(byte[] bytes){
+    public boolean parse(byte[] bytes){
 
         try {
             ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
@@ -85,6 +94,8 @@ public class MessagePack{
                 len = byteBuffer.getInt();
                 this.message = new byte[len];
                 byteBuffer.get(this.message);
+
+
             }
 
             return true;

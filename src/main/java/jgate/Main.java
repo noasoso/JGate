@@ -23,6 +23,7 @@ public class Main
         String message = "hello world";
         MessageManager.getInstance().addPubMessage(Config.CHANNEL_GATE,"cid111",MessageType.MESSAGE_TYPE_CLOSE,message.getBytes(CharsetUtil.UTF_8));
 
+        log.info("waitKey...");
         Util.readKey();
 
     }

@@ -32,12 +32,24 @@ namespace SharpService
         private List<MessagePack> messagePackList = new List<MessagePack>();
         //private ConcurrentQueue<MessagePack> messagePackQueue = new ConcurrentQueue<MessagePack>();
         private Thread dispatchThread;
-        
+        RedisClient publisher = null;
 
         public int Init()
         {
             try
             {
+                Console.WriteLine("Init");
+
+                string subscribeChannel = ConfigurationSettings.AppSettings["SubscribeChannel"];
+                string redisIp = ConfigurationSettings.AppSettings["RedisIp"];
+                int redisPort = int.Parse(ConfigurationSettings.AppSettings["RedisPort"]);
+
+                #region 发布消息
+                publisher = new RedisClient(redisIp,redisPort);
+
+
+                #endregion
+
                 #region 启动消息分发线程
 
                 dispatchThread = new Thread(DispatchThread);
@@ -48,10 +60,6 @@ namespace SharpService
                 #region 订阅消息
 
                 //订阅消息
-                string subscribeChannel = ConfigurationSettings.AppSettings["SubscribeChannel"];
-                string redisIp = ConfigurationSettings.AppSettings["RedisIp"];
-                int redisPort = int.Parse(ConfigurationSettings.AppSettings["RedisPort"]);
-
                 RedisClient redis = new RedisClient(redisIp, redisPort);//redis服务IP和端口
 
                 //创建订阅
@@ -122,5 +130,17 @@ namespace SharpService
             }
         }
 
+
+        public void Send(MessagePack mp)
+        {
+            try
+            {
+                publisher.Publish(mp.Channel, mp.Serialize());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("send error:" + e);
+            }
+        }
     }
 }

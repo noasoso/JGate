@@ -10,30 +10,22 @@ namespace SharpService
 {
     class Program
     {
-        //https://www.cnblogs.com/DreamOfLife/p/5667201.html
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World");
+            Console.WriteLine("SharpService start");
 
             try
             {
-                
-                RedisClient redis = new RedisClient("localhost", 6379);//redis服务IP和端口
-                //redis.Subscribe("ddz");
-
-                //发布消息
-                //redis.PublishMessage();
-                string message = "hello from ddz";
-                MessagePack mp = new MessagePack("cid","ddz",MessageType.MESSAGE_TYPE_DATA,System.Text.Encoding.UTF8.GetBytes(message));
-                redis.Publish("jgate", mp.Serialize());
-
-                //byte[] buf = mp.Serialize();
-                //MessagePack tmp = new MessagePack();
-                //bool ret = tmp.Parse(buf);
-
                 MessageManager.Instance().OnMessage = (msg) =>
                 {
-                    Console.WriteLine("OnMessage:" + msg.UTF8Message);
+                    Console.WriteLine("OnMessage,type:" + msg.Type + ",msg:" + msg.UTF8Message);
+                    msg.Message = Encoding.UTF8.GetBytes( "reply from sharpservice" );
+
+                    if(msg.Type == MessageType.MESSAGE_TYPE_DATA)
+                    {
+                        MessageManager.Instance().Send(msg);
+
+                    }
                 };
 
                 MessageManager.Instance().Init();

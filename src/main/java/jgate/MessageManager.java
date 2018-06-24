@@ -75,7 +75,7 @@ public class MessageManager {
             Jedis jedis1 = new Jedis(Config.REDIS_HOST,Config.REDIS_PORT);
 
             Subscriber subscriber = new Subscriber();
-            jedis1.subscribe(subscriber,Config.CHANNEL_GATE.getBytes(CharsetUtil.UTF_8));
+            jedis1.subscribe(subscriber,Config.SUB_CHANNEL.getBytes(CharsetUtil.UTF_8));
 
             log.info("subThread end");
         }
@@ -111,7 +111,11 @@ public class MessageManager {
 
     public void publish(MessagePack mp){
         try {
-            jedis.publish(Config.CHANNEL_DDZ.getBytes(CharsetUtil.UTF_8),mp.serialize());
+            //消息包中要讲channel改为jgate订阅的channel以接收回包
+            String dst = mp.channel;
+            mp.channel = Config.SUB_CHANNEL;
+
+            jedis.publish(dst.getBytes(CharsetUtil.UTF_8),mp.serialize());
             log.debug("publish now");
         }
         catch (Exception e){

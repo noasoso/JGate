@@ -26,3 +26,4 @@ hs_err_pid*
 /examples/SharpClient/SharpClient/obj
 /examples/SharpClient/.vs/SharpClient/v14/*.suo
 /.idea
+/target

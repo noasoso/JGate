@@ -6,6 +6,8 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetSocketAddress;
+
 public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
     private static final Logger log = LoggerFactory.getLogger(JGateChannelHandler.class);
 
@@ -13,12 +15,18 @@ public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
 
     private String cid = "";
 
+    private String pubChannel = "";
+
     /**
      * 获取表示唯一客户端的Id
      * @return
      */
     public String getCid(){
         return this.cid;
+    }
+
+    public String getPubChannel(){
+        return this.pubChannel;
     }
 
     @Override
@@ -39,7 +47,10 @@ public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
                 //建立连接
                 JGateChannelHandlerManager.getInstance().addChannelHandler(this);
 
-                MessageManager.getInstance().addPubMessage(Config.CHANNEL_GATE, getCid(),MessageType.MESSAGE_TYPE_CONNECT,null);
+                InetSocketAddress address = (InetSocketAddress) context.channel().localAddress();
+                this.pubChannel = Config.PUB_CHANNELS.get(address.getPort());
+
+                MessageManager.getInstance().addPubMessage(getPubChannel(), getCid(),MessageType.MESSAGE_TYPE_CONNECT,null);
             }
 
 
@@ -53,7 +64,7 @@ public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         try {
             if (msg instanceof byte[]){
-                MessageManager.getInstance().addPubMessage(Config.CHANNEL_GATE,getCid(),MessageType.MESSAGE_TYPE_DATA,(byte[]) msg);
+                MessageManager.getInstance().addPubMessage(getPubChannel(),getCid(),MessageType.MESSAGE_TYPE_DATA,(byte[]) msg);
             }
         }
         catch (Exception e){
@@ -66,7 +77,7 @@ public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
         super.channelInactive(ctx);
 
         JGateChannelHandlerManager.getInstance().removeChannelHandler(getCid());
-        MessageManager.getInstance().addPubMessage(Config.CHANNEL_GATE,getCid(),MessageType.MESSAGE_TYPE_CLOSE,null);
+        MessageManager.getInstance().addPubMessage(getPubChannel(),getCid(),MessageType.MESSAGE_TYPE_CLOSE,null);
     }
 
     @Override

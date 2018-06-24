@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+    <redis>
+        <host>localhost</host>>
+        <port>6379</port>>
+    </redis>>
+
+    <subscriber>
+        <channel>jgate</channel>>
+    </subscriber>>
+
+    <publisher>
+        <channel>18800->ddz,28800->ddz</channel>>
+    </publisher>>
+
+</config>

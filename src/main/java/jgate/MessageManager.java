@@ -59,6 +59,11 @@ public class MessageManager {
                         log.info("onMessage,ch:" + new String(channel,CharsetUtil.UTF_8)
                                 + ",type:" + mp.type + ",ch:" + mp.channel + ",cid:" + mp.cid
                                 + ",msg:" + new String(mp.message,CharsetUtil.UTF_8));
+
+                        JGateChannelHandler channelHandler = JGateChannelHandlerManager.getInstance().getChannelHandler(mp.cid);
+                        if (channelHandler != null){
+                            channelHandler.send(mp.message);
+                        }
                     }
                     catch (Exception e){
                         log.error("Subscriber error:" + e.toString());

@@ -17,7 +17,7 @@ public class Main
 
         JGateChannelListenerManager manager = JGateChannelListenerManager.getInstance();
         manager.addListener("ddz",ProtocolType.PROTOCOL_TYPE_TCP,18800,5,true);
-        manager.addListener("ddz",ProtocolType.PROTOCOL_TYPE_UDP,18800,5,true);
+//        manager.addListener("ddz",ProtocolType.PROTOCOL_TYPE_UDP,18800,5,true);
 
         Util.sleep(1000*5);
         String message = "hello world";

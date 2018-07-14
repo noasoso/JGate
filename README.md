@@ -15,10 +15,10 @@ JGate是一个致力于提升开发效率的通用网关框架，代码简洁易
 2、redis.host和redis.port为redis部署的机器和监听端口，redis本身支持windows/linux多平台部署   
 3、subscriber.channel：JGate订阅的channel，后端业务服务器通过该channel向JGate发送消息   
 4、publisher.channel:JGate监听端口到后端channel的路由规则，多个端口直接用逗号分隔   
-	<publisher>   
+	\<publisher\>   
         <!--port->channel,表示将从port端口接收的包转发到channel通道中-->   
         <channel>18800->ddz,28800->ddz</channel>>   
-    </publisher>>   
+    \</publisher\>   
 
 三、部署方式   
 1、使用Idea或者Eclipse的打包，会生成jgate-1.0-SNAPSHOT-jar-with-dependencies.jar文件，然后执行   

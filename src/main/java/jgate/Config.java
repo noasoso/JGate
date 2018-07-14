@@ -6,16 +6,19 @@ import java.util.HashMap;
 public class Config {
     public static XMLConfiguration xmlConfig;
 
+    //是否开启netty调试日志
+    public static boolean enabaleNettyLogging = false;
+
     //redis配置
-    public static String REDIS_HOST = "127.0.0.1";
-    public static int REDIS_PORT = 6379;
+    public static String redisHost = "127.0.0.1";
+    public static int redisPort = 6379;
 
 
     //订阅channel
-    public static String SUB_CHANNEL = "jgate";
+    public static String subChannel = "jgate";
 
     //发布channel
-    public static HashMap<Integer,String> PUB_CHANNELS = new HashMap<>();
+    public static HashMap<Integer,String> pubChannels = new HashMap<>();
 
 
 }

@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
-import java.nio.charset.Charset;
-
 /**
  * Unit test for simple App.
  */
@@ -52,7 +50,7 @@ public class AppTest
             MessagePack messagePack = new MessagePack("cid","ch",MessageType.MESSAGE_TYPE_CLOSE,message.getBytes(CharsetUtil.UTF_8));
             byte[] pack = messagePack.serialize();
 
-            Jedis jedis = new Jedis(Config.REDIS_HOST,Config.REDIS_PORT);
+            Jedis jedis = new Jedis(Config.redisHost,Config.redisPort);
 //            jedis.publish("ddz".getBytes(CharsetUtil.UTF_8),pack);
             jedis.publish("ddz",new String(pack,CharsetUtil.UTF_8));
         }

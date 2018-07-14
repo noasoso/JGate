@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 
+    <!--调试阶段可以设置为true，正式发布要改为false-->
+    <enableNettyLogging>true</enableNettyLogging>
+
     <redis>
         <host>localhost</host>>
         <port>6379</port>>
@@ -11,6 +14,7 @@
     </subscriber>>
 
     <publisher>
+        <!--port->channel,表示将从port端口接收的包转发到channel通道中-->
         <channel>18800->ddz,28800->ddz</channel>>
     </publisher>>
 

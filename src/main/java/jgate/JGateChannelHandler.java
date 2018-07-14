@@ -48,7 +48,7 @@ public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
                 JGateChannelHandlerManager.getInstance().addChannelHandler(this);
 
                 InetSocketAddress address = (InetSocketAddress) context.channel().localAddress();
-                this.pubChannel = Config.PUB_CHANNELS.get(address.getPort());
+                this.pubChannel = Config.pubChannels.get(address.getPort());
 
                 MessageManager.getInstance().addPubMessage(getPubChannel(), getCid(),MessageType.MESSAGE_TYPE_CONNECT,null);
             }

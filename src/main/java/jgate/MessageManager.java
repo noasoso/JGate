@@ -16,7 +16,7 @@ public class MessageManager {
     //是否处于循环中
     private boolean loop = true;
 
-    private Jedis jedis = new Jedis(Config.REDIS_HOST,Config.REDIS_PORT);
+    private Jedis jedis = new Jedis(Config.redisHost,Config.redisPort);
 
     // 发布队列，接收来自客户端的消息
     private BlockingQueue<MessagePack> pubQueue = new LinkedBlockingQueue<>();
@@ -72,10 +72,10 @@ public class MessageManager {
                 }
             }
 
-            Jedis jedis1 = new Jedis(Config.REDIS_HOST,Config.REDIS_PORT);
+            Jedis jedis1 = new Jedis(Config.redisHost,Config.redisPort);
 
             Subscriber subscriber = new Subscriber();
-            jedis1.subscribe(subscriber,Config.SUB_CHANNEL.getBytes(CharsetUtil.UTF_8));
+            jedis1.subscribe(subscriber,Config.subChannel.getBytes(CharsetUtil.UTF_8));
 
             log.info("subThread end");
         }
@@ -113,7 +113,7 @@ public class MessageManager {
         try {
             //消息包中要讲channel改为jgate订阅的channel以接收回包
             String dst = mp.channel;
-            mp.channel = Config.SUB_CHANNEL;
+            mp.channel = Config.subChannel;
 
             jedis.publish(dst.getBytes(CharsetUtil.UTF_8),mp.serialize());
             log.debug("publish now");

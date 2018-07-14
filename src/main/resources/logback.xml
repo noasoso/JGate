@@ -1,0 +1,50 @@
+<configuration>
+
+    <!-- 存放日志文件路径 -->
+    <property name="Log_Home" value="./logs" />
+
+    <!--输出console-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!--输出格式-->
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--输出到文件-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!--消息过滤 debug执行日志，否则抛弃(如果屏蔽掉filter则所有级别的日志都会输出)-->
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+            <!--<level>DEBUG</level>-->
+            <!--<onMatch>ACCEPT</onMatch>-->
+            <!--<onMismatch>DENY </onMismatch>-->
+        <!--</filter>-->
+
+
+        <!--<Encoding>UTF-8</Encoding>-->
+        <file>${Log_Home}/jgate.log</file>
+        <!--时间回滚，当天的记录记录在当天的已时间命名的文件中-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${Log_Home}/jgate.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 多久后自动清理旧的日志文件,单位:月 -->
+            <MaxHistory>12</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <!--<logger name="jgate" level="info">-->
+        <!--<appender-ref ref="FILE" />-->
+    <!--</logger>-->
+
+    <!-- 日志输出规则 根据当前ROOT 级别，日志输出时，级别高于root默认的级别时 会输出 -->
+    <!-- 输出debug级别日志及以上级别日志 -->
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>

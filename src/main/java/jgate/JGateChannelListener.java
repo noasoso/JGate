@@ -85,4 +85,12 @@ public class JGateChannelListener {
         return this.listenChannel != null;
     }
 
+    public void awaitClose(){
+        try {
+            listenChannel.closeFuture().sync();
+        }
+        catch (Exception e){
+            log.error("awaitClose error:" +e.toString());
+        }
+    }
 }

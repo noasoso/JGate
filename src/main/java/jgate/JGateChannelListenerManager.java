@@ -1,8 +1,14 @@
 package jgate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
+import java.util.Map;
 
 public class JGateChannelListenerManager {
+    private final static Logger log = LoggerFactory.getLogger(JGateChannelListenerManager.class);
+
     static final JGateChannelListenerManager manager = new JGateChannelListenerManager();
     public final static JGateChannelListenerManager getInstance() {
         return manager;
@@ -30,6 +36,20 @@ public class JGateChannelListenerManager {
 
     public int getListenerCount(){
         return channelListenerHashMap.size();
+    }
+
+    /**
+     * 等待
+     */
+    public void awaitClose(){
+        try {
+            for (Map.Entry<String,JGateChannelListener> entry : channelListenerHashMap.entrySet()){
+                entry.getValue().awaitClose();
+            }
+        }
+        catch (Exception e){
+            log.error("awaitClose error:" + e.toString());
+        }
     }
 
 }

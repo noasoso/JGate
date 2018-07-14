@@ -57,10 +57,9 @@ public class Main
             log.error("main error:" + e);
         }
 
+        //阻塞等待
+        JGateChannelListenerManager.getInstance().awaitClose();
 
-
-        log.info("waitKey...");
-        Util.readKey();
-
+        log.info("main exit");
     }
 }

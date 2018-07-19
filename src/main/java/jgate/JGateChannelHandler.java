@@ -3,6 +3,8 @@ package jgate;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.CharsetUtil;
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +19,8 @@ public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
 
     private String pubChannel = "";
 
+    private boolean isDebug = false;
+
     /**
      * 获取表示唯一客户端的Id
      * @return
@@ -25,9 +29,10 @@ public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
         return this.cid;
     }
 
-    public String getPubChannel(){
+    private String getPubChannel(){
         return this.pubChannel;
     }
+
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -50,6 +55,10 @@ public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
                 InetSocketAddress address = (InetSocketAddress) context.channel().localAddress();
                 this.pubChannel = Config.pubChannels.get(address.getPort());
 
+                if (Config.debugPorts.contains(address.getPort())){
+                    this.isDebug = true;
+                }
+
                 MessageManager.getInstance().addPubMessage(getPubChannel(), getCid(),MessageType.MESSAGE_TYPE_CONNECT,null);
             }
 
@@ -64,7 +73,19 @@ public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         try {
             if (msg instanceof byte[]){
-                MessageManager.getInstance().addPubMessage(getPubChannel(),getCid(),MessageType.MESSAGE_TYPE_DATA,(byte[]) msg);
+                byte[] buffer = (byte[])msg;
+                if (!this.isDebug){
+                    MessageManager.getInstance().addPubMessage(getPubChannel(),getCid(),MessageType.MESSAGE_TYPE_DATA,buffer);
+                }
+                else {
+                    //解析channel，格式为:一个字节的长度 + channel
+                    int chLen = buffer[0];
+                    if (chLen > 0 && chLen < 256 && chLen < (buffer.length +1)){
+                        String ch = new String(ArrayUtils.subarray(buffer,1,chLen + 1), CharsetUtil.UTF_8);
+                        log.debug("ch:" + ch);
+                        MessageManager.getInstance().addPubMessage(ch ,getCid(),MessageType.MESSAGE_TYPE_DATA,ArrayUtils.subarray(buffer,chLen + 1,buffer.length));
+                    }
+                }
             }
         }
         catch (Exception e){

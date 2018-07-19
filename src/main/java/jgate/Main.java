@@ -38,6 +38,11 @@ public class Main
                 Config.pubChannels.put(port,channel);
             }
 
+            List<String> debugPorts = Config.xmlConfig.getList("publisher.debugPort");
+            for (String port : debugPorts){
+                Config.debugPorts.add(Integer.parseInt(port));
+            }
+
             for (Integer port :Config.pubChannels.keySet()){
                 String channel = Config.pubChannels.get(port);
 

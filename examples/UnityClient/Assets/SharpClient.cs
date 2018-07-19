@@ -23,7 +23,9 @@ public class SharpClient
     private byte[] readBuffer = new byte[MAX_READ];
     private MemoryStream messageBuffer = new MemoryStream();
 
-
+    //channel的最大长度
+    private const int MAX_CHANNEL_LEN = 200;
+    private string channel = string.Empty;
 
     #region 网络接口回调
 
@@ -38,7 +40,18 @@ public class SharpClient
     // Use this for initialization
     public SharpClient()
     {
+    }
 
+    public void SetChannel(string channel)
+    {
+        if(this.channel.Length > MAX_CHANNEL_LEN)
+        {
+            this.channel = channel.Substring(0, MAX_CHANNEL_LEN);
+        }
+        else
+        {
+            this.channel = channel;
+        }
     }
 
     /// <summary>
@@ -139,7 +152,22 @@ public class SharpClient
             ms.Position = 0;
             BinaryWriter writer = new BinaryWriter(ms);
             int len = message.Length;
-            writer.Write(IPAddress.HostToNetworkOrder(len));
+
+            if (!string.IsNullOrEmpty(this.channel))
+            {
+                //调试模式，要添加channel
+                len += (1 + this.channel.Length);
+
+                
+                writer.Write(IPAddress.HostToNetworkOrder(len));//总长度
+                writer.Write((byte)this.channel.Length);//channel长度
+                writer.Write(System.Text.Encoding.UTF8.GetBytes(this.channel));
+            }
+            else
+            {
+                writer.Write(IPAddress.HostToNetworkOrder(len));
+            }
+
             writer.Write(message);
             writer.Flush();
 

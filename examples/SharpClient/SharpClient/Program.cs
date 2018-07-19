@@ -12,6 +12,8 @@ class Program
         try
         {
             SharpClient client = new SharpClient();
+            client.SetChannel("test_1");
+
             client.OnConnect = () =>
             {
                 Console.WriteLine("OnConnect");
@@ -29,9 +31,7 @@ class Program
             };
             
 
-
-
-            client.Connect("localhost", 28800);
+            client.Connect("jgate.qipai.io", 18666);
 
 
         }

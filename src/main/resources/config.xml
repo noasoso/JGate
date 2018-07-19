@@ -5,7 +5,7 @@
     <enableNettyLogging>true</enableNettyLogging>
 
     <redis>
-        <host>localhost</host>
+        <host>jgate.qipai.io</host>
         <port>6379</port>
     </redis>
 
@@ -15,7 +15,10 @@
 
     <publisher>
         <!--port->channel,表示将从port端口接收的包转发到channel通道中-->
-        <channel>18800->ddz,28800->ddz</channel>
+        <channel>18666->debug,18800->ddz,28800->bh</channel>
+
+        <!--调试端口使用客户端连接上之后发过来的channel，主要方便调试-->
+        <debugPort>18666</debugPort>
     </publisher>
 
 </config>

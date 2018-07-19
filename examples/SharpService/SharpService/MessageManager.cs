@@ -38,11 +38,11 @@ namespace SharpService
         {
             try
             {
-                Console.WriteLine("Init");
-
                 string subscribeChannel = ConfigurationSettings.AppSettings["SubscribeChannel"];
                 string redisIp = ConfigurationSettings.AppSettings["RedisIp"];
                 int redisPort = int.Parse(ConfigurationSettings.AppSettings["RedisPort"]);
+
+                Console.WriteLine("MessageManager subscribeChannel:" + subscribeChannel);
 
                 #region 发布消息
                 publisher = new RedisClient(redisIp,redisPort);

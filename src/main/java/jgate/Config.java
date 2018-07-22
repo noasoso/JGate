@@ -1,7 +1,11 @@
 package jgate;
 
 import org.apache.commons.configuration.XMLConfiguration;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 public class Config {
     public static XMLConfiguration xmlConfig;
@@ -20,5 +24,7 @@ public class Config {
     //发布channel
     public static HashMap<Integer,String> pubChannels = new HashMap<>();
 
+    //调试端口
+    public static List<Integer> debugPorts = new ArrayList<>();
 
 }

@@ -34,5 +34,7 @@ public class Config {
     public static int lengthAdjustment = 0;//长度的修正值
     public static int initialBytesToStrip = 4;//解包时跳过的字节数
 
-
+    //序列化参数
+    public static int appendLengthField = 4;//转发给客户端时在头部添加的字节数
+    public static boolean lengthIncludeLengthField = false;//添加的长度是否包含LengthField自身
 }

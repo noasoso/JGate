@@ -1,4 +1,4 @@
-package jgate;
+package jgate.channel.listener;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
@@ -8,6 +8,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import jgate.channel.protocol.JGateTcpChannelInitializer;
+import jgate.channel.protocol.JGateUdpChannelInitializer;
+import jgate.channel.protocol.ProtocolType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

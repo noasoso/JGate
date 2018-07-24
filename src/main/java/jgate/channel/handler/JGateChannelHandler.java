@@ -1,9 +1,13 @@
-package jgate;
+package jgate.channel.handler;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
+import jgate.Config;
+import jgate.Util;
+import jgate.message.MessageManager;
+import jgate.message.MessageType;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +102,7 @@ public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
         super.channelInactive(ctx);
 
         JGateChannelHandlerManager.getInstance().removeChannelHandler(getCid());
-        MessageManager.getInstance().addPubMessage(getPubChannel(),getCid(),MessageType.MESSAGE_TYPE_CLOSE,null);
+        MessageManager.getInstance().addPubMessage(getPubChannel(),getCid(), MessageType.MESSAGE_TYPE_CLOSE,null);
     }
 
     @Override
@@ -119,7 +123,15 @@ public class JGateChannelHandler extends ChannelInboundHandlerAdapter {
     public void send(byte[] buffer) {
         if (this.context != null) {
             if (buffer != null && buffer.length > 0) {
-                context.write(Unpooled.copiedBuffer(Util.intToByteArray(buffer.length)));
+                if (Config.appendLengthField == 4){
+                    //添加4个字节的包体长度
+                    context.write(Unpooled.copiedBuffer(Util.intToByteArray(buffer.length)));
+                }
+                else if (Config.appendLengthField == 2){
+                    //添加2个字节的包体长度
+                    context.write(Unpooled.copiedBuffer(Util.shortToByteArray((short) buffer.length)));
+                }
+
                 context.write(Unpooled.copiedBuffer(buffer));
                 context.flush();
             }

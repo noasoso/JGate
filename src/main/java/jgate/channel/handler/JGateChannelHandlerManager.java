@@ -1,4 +1,4 @@
-package jgate;
+package jgate.channel.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

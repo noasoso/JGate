@@ -1,6 +1,9 @@
-package jgate;
+package jgate.message;
 
 import io.netty.util.CharsetUtil;
+import jgate.Config;
+import jgate.channel.handler.JGateChannelHandler;
+import jgate.channel.handler.JGateChannelHandlerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.BinaryJedisPubSub;

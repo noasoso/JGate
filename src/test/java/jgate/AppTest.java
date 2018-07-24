@@ -3,6 +3,8 @@ package jgate;
 import static org.junit.Assert.assertTrue;
 
 import io.netty.util.CharsetUtil;
+import jgate.message.MessagePack;
+import jgate.message.MessageType;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +49,7 @@ public class AppTest
     public void testPublish(){
         try {
             String message = "hello from jgate";
-            MessagePack messagePack = new MessagePack("cid","ch",MessageType.MESSAGE_TYPE_CLOSE,message.getBytes(CharsetUtil.UTF_8));
+            MessagePack messagePack = new MessagePack("cid","ch", MessageType.MESSAGE_TYPE_CLOSE,message.getBytes(CharsetUtil.UTF_8));
             byte[] pack = messagePack.serialize();
 
             Jedis jedis = new Jedis(Config.redisHost,Config.redisPort);

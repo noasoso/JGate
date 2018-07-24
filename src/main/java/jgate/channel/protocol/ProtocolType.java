@@ -1,4 +1,4 @@
-package jgate;
+package jgate.channel.protocol;
 
 // 协议类型
 public enum  ProtocolType {

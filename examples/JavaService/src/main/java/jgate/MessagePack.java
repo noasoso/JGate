@@ -4,7 +4,6 @@ import io.netty.util.CharsetUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.charset.Charset;
 
 public class MessagePack{
     //客户端的唯一Id

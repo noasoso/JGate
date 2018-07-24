@@ -1,4 +1,4 @@
-package jgate;
+package jgate.channel.protocol;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -6,6 +6,7 @@ import io.netty.channel.socket.DatagramChannel;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import jgate.channel.handler.JGateChannelHandler;
 
 public class JGateUdpChannelInitializer extends ChannelInitializer<DatagramChannel> {
 

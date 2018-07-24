@@ -1,4 +1,4 @@
-package jgate;
+package jgate.channel.protocol;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -6,12 +6,12 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 //import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 //import io.netty.util.CharsetUtil;
-import io.netty.util.CharsetUtil;
+import jgate.Config;
+import jgate.channel.handler.JGateChannelHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

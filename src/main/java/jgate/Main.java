@@ -1,5 +1,7 @@
 package jgate;
 
+import jgate.channel.listener.JGateChannelListenerManager;
+import jgate.channel.protocol.ProtocolType;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
@@ -28,7 +30,7 @@ public class Main
             Config.enabaleNettyLogging = Config.xmlConfig.getBoolean("enableNettyLogging");
             Config.subChannel = Config.xmlConfig.getString("subscriber.channel");
             Config.redisHost = Config.xmlConfig.getString("redis.host");
-            Config.redisPort = Integer.parseInt(Config.xmlConfig.getString("redis.port"));
+            Config.redisPort = Config.xmlConfig.getInt("redis.port");
 
             List<String> items = Config.xmlConfig.getList("publisher.channel");
             for (String item : items){
@@ -42,6 +44,18 @@ public class Main
             for (String port : debugPorts){
                 Config.debugPorts.add(Integer.parseInt(port));
             }
+
+            //解析解析器参数
+            Config.maxFrameLength = Config.xmlConfig.getInt("parser.maxFrameLength");
+            Config.lengthFieldOffset = Config.xmlConfig.getInt("parser.lengthFieldOffset");
+            Config.lengthFieldLength = Config.xmlConfig.getInt("parser.lengthFieldLength");
+            Config.lengthAdjustment = Config.xmlConfig.getInt("parser.lengthAdjustment");
+            Config.initialBytesToStrip = Config.xmlConfig.getInt("parser.initialBytesToStrip");
+
+            //解析序列化参数
+            Config.appendLengthField = Config.xmlConfig.getInt("serializer.appendLengthField");
+            Config.lengthIncludeLengthField = Config.xmlConfig.getBoolean("serializer.lengthIncludeLengthField");
+
         }
         catch (ConfigurationException e){
             log.error("e:" + e.toString());
@@ -69,7 +83,7 @@ public class Main
                 String channel = Config.pubChannels.get(port);
 
                 JGateChannelListenerManager manager = JGateChannelListenerManager.getInstance();
-                manager.addListener(channel,ProtocolType.PROTOCOL_TYPE_TCP,port,5,Config.enabaleNettyLogging);
+                manager.addListener(channel, ProtocolType.PROTOCOL_TYPE_TCP,port,5,Config.enabaleNettyLogging);
                 //manager.addListener("ddz",ProtocolType.PROTOCOL_TYPE_UDP,18800,5,true);
 
                 log.info("listen on:" + port + ",pubChannel:" + channel);

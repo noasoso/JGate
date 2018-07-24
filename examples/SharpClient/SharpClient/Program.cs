@@ -31,8 +31,8 @@ class Program
             };
             
 
-            client.Connect("jgate.qipai.io", 18666);//公网
-            //client.Connect("localhost", 18666);//内网
+            //client.Connect("jgate.qipai.io", 18666);//公网
+            client.Connect("localhost", 18666);//内网
 
         }
         catch (Exception e)

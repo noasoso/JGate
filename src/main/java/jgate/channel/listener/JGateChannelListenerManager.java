@@ -1,5 +1,6 @@
-package jgate;
+package jgate.channel.listener;
 
+import jgate.channel.protocol.ProtocolType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +17,7 @@ public class JGateChannelListenerManager {
 
     private HashMap<String,JGateChannelListener> channelListenerHashMap = new HashMap<>();
 
-    public void addListener(String name,ProtocolType protocol, int port,int maxIdleTimeSeconds,boolean openDebugLogging){
+    public void addListener(String name, ProtocolType protocol, int port, int maxIdleTimeSeconds, boolean openDebugLogging){
         JGateChannelListener listener = new JGateChannelListener(protocol,port,maxIdleTimeSeconds,openDebugLogging);
         listener.listen();
         addListener(name,listener);

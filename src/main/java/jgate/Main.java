@@ -1,7 +1,5 @@
 package jgate;
 
-import io.netty.util.internal.logging.InternalLoggerFactory;
-import io.netty.util.internal.logging.Slf4JLoggerFactory;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
@@ -17,10 +15,12 @@ import java.util.List;
 public class Main
 {
     private final static Logger log = LoggerFactory.getLogger(Main.class);
-    public static void main( String[] args )
-    {
-        log.info("main start ");
 
+    /**
+     * 解析配置文件
+     * @return
+     */
+    public static int parseConfig(){
         try {
             //加载配置文件
             Config.xmlConfig = new XMLConfiguration("config.xml");
@@ -42,7 +42,29 @@ public class Main
             for (String port : debugPorts){
                 Config.debugPorts.add(Integer.parseInt(port));
             }
+        }
+        catch (ConfigurationException e){
+            log.error("e:" + e.toString());
+            return -1;
+        }
+        catch (Exception e){
+            log.error("main error:" + e);
+            return -2;
+        }
 
+        return 0;
+    }
+    public static void main( String[] args )
+    {
+        log.info("main start ");
+
+        try {
+            //加载配置文件
+            if (parseConfig() != 0){
+                return;
+            }
+
+            //监听客户端连接
             for (Integer port :Config.pubChannels.keySet()){
                 String channel = Config.pubChannels.get(port);
 
@@ -54,9 +76,6 @@ public class Main
             }
 
 
-        }
-        catch (ConfigurationException e){
-            log.error("e:" + e.toString());
         }
         catch (Exception e){
             log.error("main error:" + e);

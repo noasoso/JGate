@@ -21,4 +21,22 @@
         <debugPort>18666</debugPort>
     </publisher>
 
+    <!--消息解析器-->
+    <parser>
+        <!--一个消息的最大长度，单位字节，默认5M-->
+        <maxFrameLength>5242880</maxFrameLength>
+
+        <!--消息长度的偏移量-->
+        <lengthFieldOffset>0</lengthFieldOffset>
+
+        <!--消息长度的长度-->
+        <lengthFieldLength>4</lengthFieldLength>
+
+        <!--消息长度的修正值，解析出来的长度加上这个修正值才是真实的长度，可正可负-->
+        <lengthAdjustment>0</lengthAdjustment>
+
+        <!--解析包时跳过的字节数，比如跳过4个字节的长度-->
+        <initialBytesToStrip>4</initialBytesToStrip>
+    </parser>
+
 </config>

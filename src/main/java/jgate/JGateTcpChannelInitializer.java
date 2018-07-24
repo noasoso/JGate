@@ -40,11 +40,11 @@ public class JGateTcpChannelInitializer extends ChannelInitializer<SocketChannel
         }
 
         // 解码器
-        int maxFrameLength = 1024 * 1024 * 5;
-        int lengthFieldOffset = 0;
-        int lengthFieldLength = 4;
-        int lengthAdjustment = 0;
-        int initialBytesToStrip = 4;
+        int maxFrameLength = Config.maxFrameLength;
+        int lengthFieldOffset = Config.lengthFieldOffset;
+        int lengthFieldLength = Config.lengthFieldLength;
+        int lengthAdjustment = Config.lengthAdjustment;
+        int initialBytesToStrip = Config.initialBytesToStrip;
 
         pl.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(maxFrameLength, lengthFieldOffset, lengthFieldLength, lengthAdjustment, initialBytesToStrip));
 
